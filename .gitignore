@@ -1,0 +1,15 @@
+# Derleme çıktıları — kullanıcıya Releases üzerinden zip olarak verilir
+dbiz.exe
+dbiz-linux
+vaka-kiti/dbiz.exe
+vaka-kiti/dbiz.exe.sha256.txt
+*.zip
+
+# Örnek çıktılar bu makinenin adını ve yollarını içerir; yalnızca senaryo depoda kalır
+ornek/*
+!ornek/test_senaryosu.sql
+
+# Çalıştırma çıktıları ve parola içerebilecek ayarlar
+sonuc/
+dbiz_cikti/
+vaka_onerilen.txt

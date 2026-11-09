@@ -1,0 +1,94 @@
+DBIZ — SİLİNMİŞ KAYIT İNCELEMESİ
+Çalıştıracak kişi için kılavuz
+=================================
+
+Bu araç, MySQL yedeklerindeki eksik ID'leri bulur ve her birinin gerçekten
+silinip silinmediğini kanıt düzeyine göre sınıflandırır. Kurulum gerekmez.
+Veritabanına yalnızca OKUMA amaçlı bağlanır, hiçbir şey yazmaz veya silmez.
+
+Sizden istenen tek bilgi: MySQL kullanıcı adı ve parolası.
+Tablo adlarını, sütunları ve binlog dosyalarının yerini araç kendisi bulur.
+
+
+─── BAŞLAMADAN ÖNCE ─────────────────────────────────────────
+
+  a) Yedekler, bu bilgisayardaki (ya da erişilebilen) bir MySQL sunucusuna
+     yüklenmiş olmalı. Her yedek ayrı bir veritabanı olarak durmalı
+     (örn. yedek2023, yedek2024).
+
+  b) Orijinal veri klasörü (datadir) üzerinde MySQL'i BAŞLATMAYIN; yedeğin
+     KOPYASIYLA çalışın. Orijinalde açılış, silinmiş işaretli kayıtları
+     kalıcı olarak temizler.
+
+  c) Sunucuda günlerdir çalışan eski bir sorgu varsa durdurun:
+       SHOW PROCESSLIST;     (uzun süredir çalışan satırın Id'sini bulun)
+       KILL 12345;           (12345 yerine o Id)
+
+  d) binlog dosyaları (mysql-bin.000001 gibi) bu bilgisayarın herhangi
+     bir diskinde olmalı. Araç tüm diskleri tarayıp bulur.
+
+
+─── 1. ZIP'İ AYIKLAYIN ──────────────────────────────────────
+
+  ZIP'e sağ tıklayın → "Tümünü ayıkla" → örn. D:\dbiz
+  (ZIP'in içinden doğrudan çalıştırmayın.)
+
+
+─── 2. BASLAT.bat'A ÇİFT TIKLAYIN ───────────────────────────
+
+  Windows "Bilgisayarınız korundu" uyarısı verirse:
+    "Ek bilgi" → "Yine de çalıştır"
+
+  ADIM 0 — KEŞİF (yalnızca ilk çalıştırmada)
+    Sunucu adresi, port, kullanıcı ve parola sorulur.
+    Bilgisayar MySQL'in kendisiyse ilk üçünde sadece Enter'a basın.
+    Parola yazılırken ekranda görünmez; bu normaldir.
+
+    Araç şunları bulur ve vaka.txt'ye yazar:
+      - yedek tabloları ve eskiden yeniye sıraları
+      - ID ve kayıt zamanı sütunları
+      - binlog dosyalarının yeri ve tablonun binlog'daki adı
+    Diskler büyükse binlog araması birkaç dakika sürebilir.
+
+    Sonra vaka.txt Not Defteri'nde açılır. Göz atın; "!" ile uyarı verilen
+    bir şey varsa (ör. birden çok aday) doğru olanı seçin. KAYDEDİP
+    Not Defteri'ni KAPATIN; işlem kaldığı yerden devam eder.
+
+  ADIM 1 — KONTROL (birkaç saniye, hiçbir şey değiştirmez)
+    Tabloların sütunlarını, binlog dosya sayısını ve tahmini süreyi
+    gösterir. Doğruysa E yazıp Enter'a basın.
+
+  ADIM 2 — İNCELEME
+    Ekranda yüzde ve kalan süre görünür. Büyük tablolarda saatler
+    sürebilir. Bilgisayarı kapatmayın, uykuya almayın.
+    Kesilirse BASLAT.bat'a tekrar çift tıklayın; biten adımlar atlanır.
+
+  Bir şeyi değiştirmek isterseniz vaka.txt'yi Not Defteri ile açıp düzeltin.
+  Keşfi baştan yaptırmak için vaka.txt'yi silin; BASLAT.bat yenisini oluşturur.
+
+
+─── 3. SONUÇ ────────────────────────────────────────────────
+
+  Bittiğinde "sonuc" klasörü kendiliğinden açılır.
+
+  rapor_<etiket>.html            → çift tıklayın: özet rapor (yazdırılabilir)
+  siniflandirma_<etiket>.tsv     → her boşluğun sınıfı (Excel'de açılır)
+  kurtarilan_*.csv               → eski yedekten geri getirilen silinmiş satırlar
+  binlog_satir_goruntuleri.csv   → binlog'dan silinen/değiştirilen satırların içeriği
+  islem_gunlugu.txt              → çalıştırılan her işlemin kaydı
+
+  Sınıfların anlamı:
+    K1, K2    KESİN SİLİNDİ       (yedek farkı ya da binlog'da silme kaydı)
+    K3        ŞÜPHELİ             (binlog'da eklenmiş, silme kaydı yok)
+    K7        SİLİNMİŞ OLABİLİR   (süre uygun, doğrudan kanıt yok)
+    K4-K6     OLUŞMAMIŞ           (geri alınmış işlem / sayaç atlaması)
+    K8        BELİRSİZ            (veri yetersiz)
+
+
+─── SORUN OLURSA NE GÖNDERİLİR ──────────────────────────────
+
+  Siyah penceredeki HATA satırının ekran görüntüsünü gönderin.
+
+  vaka.txt MySQL parolasını içerir; kimseyle paylaşmayın.
+  kurtarilan_*.csv ve binlog_satir_goruntuleri.csv vaka verisidir;
+  inceleme ortamından dışarı çıkarmayın, e-postayla göndermeyin.

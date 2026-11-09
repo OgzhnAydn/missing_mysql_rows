@@ -1,0 +1,30 @@
+# dbiz vaka ayarı — yalnızca bu dosyayı düzenleyip kaydedin, sonra BASLAT.bat'a çift tıklayın.
+# Satır başında # olanlar açıklamadır, dikkate alınmaz.
+
+# Yedeklerin yüklendiği MySQL sunucusu (yedeğin KOPYASI; orijinal datadir üzerinde MySQL açmayın)
+dsn = root:SIFRE@tcp(127.0.0.1:3306)/
+
+# Yedekler: "yedek ETİKET = veritabanı.tablo", ESKİDEN YENİYE sırayla.
+# En alttaki, incelenen (en yeni) yedektir. Tek yedek de olur.
+yedek 2023 = yedek2023.tablo_adi
+yedek 2024 = yedek2024.tablo_adi
+
+# AUTO_INCREMENT sütunu ve kayıt zamanı sütunu (bilmiyorsanız önce: dbiz vaka --ayar vaka.txt --kontrol)
+id    = id
+zaman = created_at
+tz    = Europe/Istanbul
+
+# Binlog dosyaları (desen kullanılabilir). Yoksa satırı boş bırakın.
+binlog = D:\delil\binlog\mysql-bin.0*
+# Binlog'da tablonun ORİJİNAL adı (canlı sistemdeki veritabanı.tablo; yedeğin yüklendiği ad değil)
+binlog_tablo = canli_veritabani.tablo_adi
+# ID'nin tablodaki sütun sırası; boşsa en yeni yedekten otomatik bulunur
+binlog_id_sutun =
+
+# Mühürlenecek orijinal delil dosya/klasörleri (birden çok satır olabilir).
+# Kullanmak için baştaki # işaretini silip yolu yazın.
+# muhur = D:\delil\binlog
+
+# Çıktı klasörü (boş bırakılırsa bu klasörün içinde "sonuc" klasörü açılır) ve rapor başlığı
+klasor = sonuc
+baslik = Vaka adı / dosya no
